@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout github
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2 # checkout my github repo
       
       - name: install kubectl
         uses: azure/setup-kubectl@v3
@@ -21,7 +21,7 @@ jobs:
       - name: configure aws
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_KEY }} #github repo's secrets for action
           aws-secret-access-key:  ${{ secrets.AWS_SECRET }}
           aws-region: ap-northeast-2
 
@@ -34,7 +34,7 @@ jobs:
 
       - name: build and push docker image to ecr
         env:
-          REGISTRY: 346903264902.dkr.ecr.ap-northeast-2.amazonaws.com
+          REGISTRY: 565319458549.dkr.ecr.ap-northeast-2.amazonaws.com
           REPOSITORY: order-backend
           IMAGE_TAG: latest
         run: |
