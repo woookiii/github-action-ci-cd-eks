@@ -1,0 +1,28 @@
+services:
+  mydb:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=ordersystem
+    ports:
+      - "3306:3306"
+  myredis:
+    image: redis
+    ports:
+      - "6379:6379"
+      #if i change this docker image name woookiii/my-spring:v1.2 i can push this to my docker hub directly after docker compose up -d --build, I mean after build image
+  my-spring:
+    build:
+      context: .
+      dockerfile: Dockerfile #we can build image again every docker compose up by --build
+    ports:
+      - "8080:8080"
+    depends_on: #this spring will run after seeing db and redis is running as container
+      - mydb
+      - myredis
+    restart: on-failure:10 #even if it died by db's setting up time, it will rerun
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mydb:3306/ordersystem?useSSL=false&allowPublicKeyRetrieval=true # this will overwrite application.yml's spring:datasource:url and we dont need to say host.docker.internal since we run all the db and spring in one compose file
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_DATA_REDIS_HOST=myredis
