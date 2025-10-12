@@ -32,16 +32,20 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: build and push docker image to ecr
         env:
           REGISTRY: 565319458549.dkr.ecr.ap-northeast-2.amazonaws.com
           REPOSITORY: order-backend
           IMAGE_TAG: latest
         run: |
-          docker build \
+          docker buildx build \
+          --platform linux/amd64 \
           -t $REGISTRY/$REPOSITORY:$IMAGE_TAG \
-          -f ./2.ordersystem/Dockerfile ./2.ordersystem
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+          -f ./2.ordersystem/Dockerfile ./2.ordersystem \
+          --push
 
       - name: eks kubectl apply
         run: |
