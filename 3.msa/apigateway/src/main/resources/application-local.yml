@@ -19,7 +19,7 @@ spring:
             #              - 'https://www.example.com'
             allowedMethods: '*'
             allowedHeaders: '*'
-            allowedCredentials: true
+            allowCredentials: true
       routes:
         - id: member-service
           predicates:

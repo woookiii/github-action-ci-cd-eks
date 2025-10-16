@@ -18,7 +18,7 @@ spring:
               - 'https://www.example.com'
             allowedMethods: '*'
             allowedHeaders: '*'
-            allowedCredentials: true
+            allowCredentials: true
       routes:
         - id: member-service
           predicates:
@@ -26,7 +26,7 @@ spring:
           filters:
             # StripPrefix : 첫번째 접두어를 제거후에 member-service로 http요청 전달
             - StripPrefix=1
-          uri: http://member-service
+          uri: http://member-service #kubenetes' service to discover pod
         - id: ordering-service
           predicates:
             - Path=/ordering-service/**
